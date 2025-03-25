@@ -210,7 +210,7 @@ selected_features = [
 ]
 
 # UI Design
-st.title("Credit Catergory Prediction")
+st.title("Credit Category Prediction")
 
 st.write("Please enter the data to make a prediction:")
 
