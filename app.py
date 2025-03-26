@@ -30,7 +30,7 @@ st.markdown("""
             font-weight: bold;
         }
     </style>
-    <div class="title">🏦 Credit Scoring Prediction 🏦</div>
+    <div class="title">🏦 Credit Category Prediction 🏦</div>
 """, unsafe_allow_html=True)
 
 # File uploader for Excel file
@@ -88,11 +88,14 @@ st.write("### 🔍 **Predict using New Data**")
 input_values = {}
 
 # Create input fields for each feature
+# Create input fields for each feature
 for feature in selected_features:
-    if 'نسبة' in feature or 'العائد' in feature:  # For percentage features
-        input_values[feature] = st.number_input(feature, min_value=0.0, max_value=1.0, step=0.01)
+    # For percentage features
+    if 'نسبة' in feature or 'العائد' in feature:
+        input_values[feature] = st.number_input(feature, format="%.5f")  # Accepts any value, with 5 decimal precision
     else:
-        input_values[feature] = st.number_input(feature)
+        input_values[feature] = st.number_input(feature, format="%.5f")  # Accepts any value, with 5 decimal precision
+
 
 # Prediction for new inputs
 if st.button("Predict"):
