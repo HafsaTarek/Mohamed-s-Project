@@ -9,6 +9,7 @@ Original file is located at
 **Improting libraries**
 """
 
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -17,6 +18,7 @@ from sklearn.feature_selection import SelectKBest, f_classif
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score
 from imblearn.over_sampling import RandomOverSampler
+import joblib
 
 """Preprocessign (**Cleaning** the data for better accuracy)"""
 
@@ -88,26 +90,42 @@ model.fit(X_train, y_train)
 # Make Predictions
 y_pred = model.predict(X_test)
 
+
 # Evaluate Model
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Model Accuracy: {accuracy:.2f}")
 
-# Feature selection
-selector = SelectKBest(score_func=f_classif, k=8)  # Select top 8 features
-X_selected = selector.fit_transform(X, y)
+# # Feature selection
+# selector = SelectKBest(score_func=f_classif, k=7)  # Select top 8 features
+# X_selected = selector.fit_transform(X, y)
 
 # Get the names of the selected features
 selected_features = np.array(numeric_cols)[selector.get_support()]
 print("Selected Features:", selected_features)
 
-import joblib
+
+from sklearn.ensemble import RandomForestClassifier
+
+# Create and train the model
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = rf_model.predict(X_test)
+
+# Evaluate model
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Random Forest Accuracy: {accuracy:.2f}")
+
+
+
 
 # Save the trained model, selector, scaler, and label encoder
 joblib.dump(model, 'xgb_model.pkl')
+joblib.dump(rf_model, 'rf_model.pkl') 
 joblib.dump(selector, 'selector.pkl')
 joblib.dump(scaler, 'scaler.pkl')
 joblib.dump(label_encoder, 'label_encoder.pkl')
 
 print("Model and preprocessing objects have been saved.")
-
 
